@@ -16,9 +16,10 @@
                 <div class="panel-body">
                     <div class="list-group">
                         <div class="list-group-item" ng-repeat="test in tests">
-                            Input: {{test.startTime | date:'hh:mm a'}}<br>
-                            Valid Input: {{testRule(test.startTime)}}<br>
-                            Passed Test: <span ng-class="{'text-success':testRule(test.startTime) === test.expected}">{{testRule(test.startTime) === test.expected}}</span>
+                            Start Time: {{test.startTime | date:'hh:mm a'}}<br>
+                            End Time: {{test.endTime | date:'hh:mm a'}}<br>
+                            Valid Input: {{testRule(test.startTime, test.endTime)}}<br>
+                            Passed Test: <span ng-class="{'text-success':testRule(test.startTime, test.endTime) === test.expected}">{{testRule(test.startTime, test.endTime) === test.expected}}</span>
                         </div>
                     </div>
                 </div>
@@ -32,7 +33,9 @@
                         <div class="col-md-offset-4 col-md-4 col-sm-offset-3 col-sm-6 col-xs-12 col-xs-offset-0">
                             <label for="startTime">Start Time:</label>
                             <input id="startTime" name="startTime" class="form-control" ng-model="manual.start" type="time"><br>
-                            Valid Input: {{testRule(manual.start)}}
+                            <label for="endTime">End Time:</label>
+                            <input id="endTime" name="endTime" class="form-control" ng-model="manual.end" type="time"><br>
+                            Valid Input: {{testRule(manual.start, manual.end)}}
                         </div>
                     </div>
                 </div>
