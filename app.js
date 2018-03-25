@@ -25,7 +25,7 @@
                 startTime: new Date(2018, 2, 25, 19, 0),
                 endTime: new Date(2018, 2, 25, 2, 0),
                 bedtime: new Date(2018, 2, 25, 1, 0),
-                expected: 72
+                expected: 92
             },
             {
                 startTime: new Date(2018, 2, 25, 2, 0),
@@ -49,7 +49,7 @@
                 startTime: new Date(2018, 2, 25, 0, 0),
                 endTime: new Date(2018, 2, 25, 4, 0),
                 bedtime: new Date(2018, 2, 25, 0, 0),
-                expected: 0
+                expected: 64
             },
             {
                 startTime: new Date(2018, 2, 25, 4, 0),
@@ -78,6 +78,12 @@
 
         //fourth rule - babysitter is paid $8/hour between bedtime and midnight
         //Question: What if bedtime is after midnight? I'm going to pay the babysitter $12 an hour up until bedtime, regardless of time. Then an additional $8 an hour if bedtime is before midnight, until midnight.
+
+        //fifth rule - babysitter is paid $16/hour after midnight until end of job
+        //Question: if bedtime is after midnight, does babysitter get paid $12/hr or $16/hr? I'm going to pay the babysitter $16/hr after midnight, regardless of bedtime.
+
+        //sixth rule - babysitter gets paid for full hours only
+        //Thought: I hadn't really taken minutes into account when I started this, but adjusting the math at this point could have been easily worked in.
 
 
         function afterFivePM(input){
@@ -119,22 +125,31 @@
             //calculates payment before bedtime
             if(beforeFourAM(input.bedtime)){
                 if(!beforeFourAM(input.start)) {
-                    return 12 * (input.bedtime.getHours() + (24 - input.start.getHours()));
+                    return 12 * (24 - input.start.getHours());
                     //accounts for bedtime after midnight when start time was before midnight
+                    //EDIT: no longer pays after midnight. pays until midnight, then end pay covers $16/hr after midnight
                 }
             }
             return 12 * (input.bedtime.getHours() - input.start.getHours());
+            //pays $12/hr if bedtime is before midnight
         }
 
         function calcEndPay(input){
             //calculates payment after bedtime until midnight
             if(afterFivePM(input.bedtime)){
                 if(beforeFourAM(input.end)){
-                    return 8 * (24 - input.bedtime.getHours());
-                    //pays all the way until midnight
+                    return (8 * (24 - input.bedtime.getHours())) + (16 * input.end.getHours());
+                    //pays $8/hr after bedtime until midnight + 16/hr for every hour after midnight
                 }
                 return 8 * (input.end.getHours() - input.bedtime.getHours());
-                //accounts for end time not being later than midnight
+                //accounts for end time not being later than midnight, pays $8/hr after bedtime until end time
+            } else if(beforeFourAM(input.end)){
+                if(beforeFourAM(input.start)){
+                    return 16 * (input.end.getHours() - input.start.getHours());
+                    //accounts for use case of start being later than midnight, pays $16/hr from start to end
+                }
+                return 16 * input.end.getHours();
+                // pays 16/hr after night
             }
             return 0;
         }
