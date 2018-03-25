@@ -19,7 +19,7 @@
                 startTime: new Date(2018, 2, 25, 17, 0),
                 endTime: new Date(2018, 2, 25, 20, 0),
                 bedtime: new Date(2018, 2, 25, 19, 0),
-                expected: 24
+                expected: 32
             },
             {
                 startTime: new Date(2018, 2, 25, 19, 0),
@@ -76,6 +76,10 @@
         //Question: When is bedtime? Made bedtime a variable input.
         //Question: What if child is already asleep when babysitter arrives? I allow for bedtime to be anytime between start and end times.
 
+        //fourth rule - babysitter is paid $8/hour between bedtime and midnight
+        //Question: What if bedtime is after midnight? I'm going to pay the babysitter $12 an hour up until bedtime, regardless of time. Then an additional $8 an hour if bedtime is before midnight, until midnight.
+
+
         function afterFivePM(input){
             return input && input.getHours() >= 17;
         }
@@ -111,13 +115,28 @@
             return false;
         }
 
-        function calcPay(input){
+        function calcStartPay(input){
+            //calculates payment before bedtime
             if(beforeFourAM(input.bedtime)){
                 if(!beforeFourAM(input.start)) {
                     return 12 * (input.bedtime.getHours() + (24 - input.start.getHours()));
+                    //accounts for bedtime after midnight when start time was before midnight
                 }
             }
             return 12 * (input.bedtime.getHours() - input.start.getHours());
+        }
+
+        function calcEndPay(input){
+            //calculates payment after bedtime until midnight
+            if(afterFivePM(input.bedtime)){
+                if(beforeFourAM(input.end)){
+                    return 8 * (24 - input.bedtime.getHours());
+                    //pays all the way until midnight
+                }
+                return 8 * (input.end.getHours() - input.bedtime.getHours());
+                //accounts for end time not being later than midnight
+            }
+            return 0;
         }
 
         $scope.validInput = function(start, end, bedtime){
@@ -134,7 +153,7 @@
         $scope.testRule = function(start, end, bedtime){
             if(start && end && bedtime){
                 if($scope.validInput(start, end, bedtime)){
-                    return calcPay({start: start, end: end, bedtime: bedtime});
+                    return calcStartPay({start: start, end: end, bedtime: bedtime}) + calcEndPay({start: start, end: end, bedtime: bedtime});
                 }
                 return null;
             }
