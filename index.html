@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Babysitter Kata</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body class="text-center" ng-controller="mainCtrl">
+<div class="container">
+    <div class="row">
+        <div class="col-sm-offset-3 col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>Tests</strong>
+                </div>
+                <div class="panel-body">
+                    <div class="list-group">
+                        <div class="list-group-item" ng-repeat="test in tests">
+                            Input: {{test.startTime | date:'hh:mm a'}}<br>
+                            Valid Input: {{testRule(test.startTime)}}<br>
+                            Passed Test: <span ng-class="{'text-success':testRule(test.startTime) === test.expected}">{{testRule(test.startTime) === test.expected}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>Manual Inputs</strong>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-offset-4 col-md-4 col-sm-offset-3 col-sm-6 col-xs-12 col-xs-offset-0">
+                            <label for="startTime">Start Time:</label>
+                            <input id="startTime" name="startTime" class="form-control" ng-model="manual.start" type="time"><br>
+                            Valid Input: {{testRule(manual.start)}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E=" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
