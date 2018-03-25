@@ -17,9 +17,13 @@
                     <div class="list-group">
                         <div class="list-group-item" ng-repeat="test in tests">
                             Start Time: {{test.startTime | date:'hh:mm a'}}<br>
+                            Bedtime: {{test.bedtime | date:'hh:mm a'}}<br>
                             End Time: {{test.endTime | date:'hh:mm a'}}<br>
-                            Valid Input: {{testRule(test.startTime, test.endTime)}}<br>
-                            Passed Test: <span ng-class="{'text-success':testRule(test.startTime, test.endTime) === test.expected}">{{testRule(test.startTime, test.endTime) === test.expected}}</span>
+                            Valid Input: {{validInput(test.startTime, test.endTime, test.bedtime)}}<br>
+                            Money Earned:
+                            <span ng-show="testRule(test.startTime, test.endTime, test.bedtime)"> {{testRule(test.startTime, test.endTime, test.bedtime) | currency}} </span>
+                            <span ng-hide="testRule(test.startTime, test.endTime, test.bedtime)"> N/A </span><br>
+                            Passed Test: {{testRule(test.startTime, test.endTime, test.bedtime) == test.expected}}
                         </div>
                     </div>
                 </div>
@@ -33,9 +37,14 @@
                         <div class="col-md-offset-4 col-md-4 col-sm-offset-3 col-sm-6 col-xs-12 col-xs-offset-0">
                             <label for="startTime">Start Time:</label>
                             <input id="startTime" name="startTime" class="form-control" ng-model="manual.start" type="time"><br>
+                            <label for="bedtime">Bedtime:</label>
+                            <input id="bedtime" name="bedtime" class="form-control" ng-model="manual.bedtime" type="time"><br>
                             <label for="endTime">End Time:</label>
                             <input id="endTime" name="endTime" class="form-control" ng-model="manual.end" type="time"><br>
-                            Valid Input: {{testRule(manual.start, manual.end)}}
+                            Valid Input: {{validInput(manual.start, manual.end, manual.bedtime)}}<br>
+                            Money Made:
+                            <span ng-show="testRule(manual.start, manual.end, manual.bedtime)"> {{testRule(manual.start, manual.end, manual.bedtime) | currency}} </span>
+                            <span ng-hide="testRule(manual.start, manual.end, manual.bedtime)"> N/A </span><br>
                         </div>
                     </div>
                 </div>
